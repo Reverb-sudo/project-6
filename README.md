@@ -1,72 +1,47 @@
 # UOCIS322 - Project 6 #
-Brevet time calculator with MongoDB, and a RESTful API!
+kiem@uoregon.edu
+Kie MacPherson
+## Outline
+This is a web-based application designed to calculate and display open and close times for respective KM/mile checkpoints for the RUSA ACP brevet. It also now uses a Mongo Database to be able to store input/field data as well as "Display" and "Insert" buttons and functionality. Lastly, it now uses an efficient restful API.
 
-Read about MongoEngine and Flask-RESTful before you start: [http://docs.mongoengine.org/](http://docs.mongoengine.org/), [https://flask-restful.readthedocs.io/en/latest/](https://flask-restful.readthedocs.io/en/latest/).
+## API
 
-## Before you begin
-You *HAVE TO* copy `.env-example` into `.env` and specify your container port numbers there!
-Note that the default values (5000 and 5000) will work!
+By using the RESTful API, there is now a data schema that uses MongoEngine for Checkpoints and Brevets.
 
-*DO NOT PLACE LOCAL PORTS IN YOUR COMPOSE FILE!*
+## Algorithm
+All open times for each passed control are added up as length from the prior control divided by the maximum speed for that control. If a control is not passed, the remainder is divided instead.
 
-## Overview
+(length from prior control to next control / max speed) +
+(length from prior control to next control / max speed) + ... + (remainder / max speed)
 
-You will reuse your code from Project 5, which already has two services:
+The closed times are the same but with max speed replaced with minimum speed. There is an oddity where the closing time within the first 60 km is based on 20 km/hr plus 1 hour.
 
-* Brevets
-	* The entire web service
-* MongoDB
+The table is as follows:
 
-For this project, you will re-organize `Brevets` into two separate services:
+Control location (km)	Minimum Speed (km/hr)	Maximum Speed (km/hr)
+0 - 200										15												34
+200 - 400									15												32
+400 - 600									15												30
+600 - 1000								11.428										28
+1000 - 1300								13.333										26
 
-* Web (Front-end)
-	* Time calculator (basically everything you had in project 4)
-* API (Back-end)
-	* A RESTful service to expose/store structured data in MongoDB.
+## How to use start
 
-## Tasks
+run docker:
+docker build -t image-name .
+//where image-name is your choice of the docker image name.
 
-* Implement a RESTful API in `api/`:
-	* Write a data schema using MongoEngine for Checkpoints and Brevets:
-		* `Checkpoint`:
-			* `distance`: float, required, (checkpoint distance in kilometers), 
-			* `location`: string, optional, (checkpoint location name), 
-			* `open_time`: datetime, required, (checkpoint opening time), 
-			* `close_time`: datetime, required, (checkpoint closing time).
-		* `Brevet`:
-			* `length`: float, required, (brevet distance in kilometers),
-			* `start_time`: datetime, required, (brevet start time),
-			* `checkpoints`: list of `Checkpoint`s, required, (checkpoints).
-	* Using the schema, build a RESTful API with the resource `/brevets/`:
-		* GET `http://API:PORT/api/brevets` should display all brevets stored in the database.
-		* GET `http://API:PORT/api/brevet/ID` should display brevet with id `ID`.
-		* POST `http://API:PORT/api/brevets` should insert brevet object in request into the database.
-		* DELETE `http://API:PORT/api/brevet/ID` should delete brevet with id `ID`.
-		* PUT `http://API:PORT/api/brevet/ID` should update brevet with id `ID` with object in request.
+run image:
+docker run -d -p forwardedport:5000 image-name
 
-* Copy over `brevets/` from your completed project 5.
-	* Replace every database related code in `brevets/` with calls to the new API.
-		* Remember: AutoGrader will ensure there is NO CONNECTION between `brevets` and `db` services. `brevets` should only operate through `api` and still function the way it did in project 5.
-		* Hint: Submit should send a POST request to the API to insert, Display should send a GET request, and display the last entry.
-	* Remove `config.py` and adjust `flask_brevets.py` to use the `PORT` and `DEBUG` values specified in env variables (see `docker-compose.yml`).
+to run in your browser go to:
+http://localhost:forwardedport
 
-* Update README.md with API documentation added.
+where forwardedport is a port to forward to e.g. (5001); but do not use 5000.
 
-As always you'll turn in your `credentials.ini` through Canvas.
+## How to use tests:
+to see docker containers:
+docker ps
 
-## Grading Rubric
-
-* If your code works as expected: 100 points. This includes:
-    * API routes as outlined above function exactly the way expected,
-    * Web application works as expected in project 5,
-    * README is updated with the necessary details.
-
-* If the front-end service does not work, 20 points will be docked.
-
-* For each of the 5 requests that do not work, 15 points will be docked.
-
-* If none of the above work, 5 points will be assigned assuming project builds and runs, and `README` is updated. Otherwise, 0 will be assigned.
-
-## Authors
-
-Michal Young, Ram Durairajan. Updated by Ali Hassani.
+run tests:
+docker exec $(ID of container from docker ps)
