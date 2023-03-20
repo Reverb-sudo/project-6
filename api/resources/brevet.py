@@ -28,7 +28,7 @@ from database.models import Brevet
 # it from a MongoEngine query object to a JSON and send back the JSON
 # directly instead of letting Flask-RESTful attempt to convert it to a
 # JSON for you.
-class Brevet(Resource):
+class BrevetResource(Resource):
     def get(self, _id):
         brevet = Brevet.object.get(id=_id).to_json()
         return Response(Brevet, mimetype = "application/json", status = 200)

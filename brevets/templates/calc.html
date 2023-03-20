@@ -164,9 +164,12 @@
                  //"kmlist":[],"openlist":[],"closelist":[]};
                  let i=0;
                  for (i; i<20;i++){
+                   console.log("Checking getkms[i].value: ", getkms[i].value)
+                   if (getkms[i].value) {
                    lists.controllist.push({"km":getkms[i].value,
                    "open":getopens[i].value,
                    "close":getcloses[i].value})
+                 }
                  }
 
                  console.log("lists:")

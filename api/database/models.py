@@ -9,7 +9,7 @@ class Checkpoint(EmbeddedDocument):
 		open_time: MongoEngine datetime field, required, (checkpoint opening time),
 		close_time: MongoEngine datetime field, required, (checkpoint closing time).
     """
-    km = StringField(required = True)
+    km = FloatField(required = True)
     location = StringField(required = False)
     open = StringField(required = True)
     close = StringField(required = True)
@@ -23,7 +23,7 @@ class Brevet(Document):
 		start_time: MongoEngine datetime field, required
 		checkpoints: MongoEngine list field of Checkpoints, required
     """
-    length = StringField(required = True)
+    length = FloatField(required = True)
     start_time= StringField(required = True)
     checkpoints = EmbeddedDocumentListField(Checkpoint, required = True)
     pass
