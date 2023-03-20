@@ -30,8 +30,8 @@ from database.models import Brevet
 # JSON for you.
 class BrevetResource(Resource):
     def get(self, _id):
-        json_object = Brevet.objects().to_json()
-        return Response(json_object, mimetype = "application/json", status = 200)
+        Brevet = Brevet.objects.get(id=_id).to_json()
+        return Response(Brevet, mimetype = "application/json", status = 200)
 
     def put(self, _id):
         input_json = request.json
