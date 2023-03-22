@@ -18,7 +18,7 @@ import os
 ###
 app = flask.Flask(__name__)
 app.debug = True if "DEBUG" not in os.environ else os.environ["DEBUG"]
-port_number = True if "PORT" not in os.environ else os.environ["PORT"]
+port_num = True if "PORT" not in os.environ else os.environ["PORT"]
 app.logger.setLevel(logging.DEBUG)
 
 
@@ -136,4 +136,4 @@ if app.debug:
 
 if __name__ == "__main__":
     #print("Opening for global access on port {}".format(CONFIG.PORT))
-    app.run(port=API_PORT, host="0.0.0.0")
+    app.run(port=port_num, host="0.0.0.0")
