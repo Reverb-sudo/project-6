@@ -36,7 +36,7 @@ def insert_brevet(length, start_time, checkpoints):
 
 def fetch_brevet():
     lists = requests.get(f"{API_URL}/brevets").json()
-    brevet = brevets[-1]
+    brevet = lists[-1]
     return brevet["length"], brevet["start_time"], brevet["checkpoints"]
 ###
 # Pages
