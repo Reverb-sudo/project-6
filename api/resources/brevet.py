@@ -35,9 +35,9 @@ class BrevetResource(Resource):
 
     def put(self, _id):
         input_json = request.json
-        Brevet.object.get(id=_id).update(**input_json)
+        Brevet.objects.get(id=_id).update(**input_json)
         return '', 200
 
     def delete(self, _id):
-        Brevet.object.get(id=_id).delete()
+        Brevet.objects.get(id=_id).delete()
         return '', 200

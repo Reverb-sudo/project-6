@@ -36,7 +36,7 @@ def insert_brevet(length, start_time, checkpoints):
 
 def fetch_brevet():
     lists = requests.get(f"{API_URL}/brevets").json()
-    brevet = lists[-1]
+    brevet = brevets[-1]
     return brevet["length"], brevet["start_time"], brevet["checkpoints"]
 ###
 # Pages
@@ -115,14 +115,19 @@ def _insert():
 
 @app.route("/_fetch")
 def _fetch():
-    #fetched = fetch_brevet()
-    length, start_time, checkpoints = fetch_brevet()
-    return flask.jsonify(
-    result={
-    "length": length,
-    "start_time": start_time,
-    "checkpoints": checkpoints
-    })
+    try:
+        length, start_time, checkpoints = fetch_brevet()
+        return flask.jsonify(
+        result={
+        "length": length,
+        "start_time": start_time,
+        "checkpoints": checkpoints
+        })
+    except:
+        return flask.jsonify(
+                result={},
+                status=0,
+                message="Something went wrong, couldn't fetch any lists!")
 #############
 
 app.debug = os.environ["DEBUG"]

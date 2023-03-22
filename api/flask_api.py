@@ -1,6 +1,7 @@
 """
 Brevets RESTful API
 """
+import logging
 import os
 from flask import Flask
 from flask_restful import Api
@@ -22,13 +23,20 @@ connect(host=f"mongodb://{os.environ['MONGODB_HOSTNAME']}:27017/brevetsdb")
 app = Flask(__name__)
 api = Api(app)
 
+app.debug = True if "DEBUG" not in os.environ else os.environ["DEBUG"]
+port_num = True if "PORT" not in os.environ else os.environ["PORT"]
+app.logger.setLevel(logging.DEBUG)
+
 # Bind resources to paths here:
 # api.add_resource(...)
 api.add_resource(BrevetResource, "/api/brevet/<id>")
 api.add_resource(BrevetsResource, "/api/brevets")
 
+
+
+
 if __name__ == "__main__":
     # Run flask app normally
     # Read DEBUG and PORT from environment variables.
     # pass
-    app.run(port=os.environ["PORT"], host="0.0.0.0")
+    app.run(port=port_num], host="0.0.0.0")
